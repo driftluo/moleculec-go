@@ -3,8 +3,8 @@ name = "moleculec-go"
 version = "0.1.0"
 authors = ["driftluo <driftluo@foxmail.com>"]
 edition = "2018"
-description = "Schema compiler for molecule."
-repository = "https://github.com/nervosnetwork/molecule"
+description = "Compiler plugin for moleculec."
+repository = "https://github.com/driftluo/moleculec-go"
 keywords = ["molecule", "code-generation", "serialization"]
 categories = [
     "parser-implementations",

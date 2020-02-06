@@ -47,7 +47,7 @@ func {union_name}From{item_name}(v {item_name}) {union_name} {{
 }}
                         "#,
                         union_name = union_name,
-                        item_name = item_name,
+                        item_name = item_name.to_camel(),
                         item_id = item_id
                     );
                     part_impl.push(part);
@@ -99,7 +99,7 @@ func {union_name}From{item_name}(v {item_name}) {union_name} {{
         }}
                 "#,
                     id = id,
-                    item = item
+                    item = item.to_camel()
                 )
             })
             .collect::<Vec<String>>()

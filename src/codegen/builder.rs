@@ -273,8 +273,9 @@ impl GenBuilder for ast::Table {
             format!(
                 r#"
 func (s *{struct_name}Builder) Build() {struct_name} {{
-    s := new(bytes.Buffer)
-    s.Write(packNumber(Number(HeaderSizeUint)))
+    b := new(bytes.Buffer)
+    b.Write(packNumber(Number(HeaderSizeUint)))
+    return {struct_name}{{inner: b.Bytes()}}
 }}
                 "#,
                 struct_name = struct_name

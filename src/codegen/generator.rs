@@ -540,6 +540,7 @@ impl Generator for ast::Table {
 func New{struct_name}() {struct_name} {{
     s := new(bytes.Buffer)
     s.Write(packNumber(Number(HeaderSizeUint)))
+    return {struct_name}{{inner: s.Bytes()}}
 }}
 func {struct_name}FromSlice(slice []byte, compatible bool) (*{struct_name}, error) {{
     sliceLen := len(slice)
@@ -571,7 +572,7 @@ func {struct_name}FromSlice(slice []byte, compatible bool) (*{struct_name}, erro
                     let end = i + 1;
                     format!(
                         r#"
-_, err := {field}FromSlice(slice[offsets[{start}]:offsets[{end}]], compatible)
+_, err = {field}FromSlice(slice[offsets[{start}]:offsets[{end}]], compatible)
 if err != nil {{
     return nil, err
 }}
@@ -639,6 +640,8 @@ func {struct_name}FromSlice(slice []byte, compatible bool) (*{struct_name}, erro
             return nil, errors.New("OffsetsNotMatch")
         }}
     }}
+
+    var err error
     {verify_fields}
 
     return &{struct_name}{{inner: slice}}, nil
@@ -744,7 +747,7 @@ func (s *{struct_name}) {func}() *{inner} {{
     offsets := s.FieldOffsets()
     start := unpackNumber(offsets[{start}][:])
     end := unpackNumber(offsets[{end}][:])
-    {inner}FromSliceUnchecked({getter_stmt})
+    return {inner}FromSliceUnchecked({getter_stmt})
 }}
                "#,
                         struct_name = struct_name,
