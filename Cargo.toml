@@ -23,3 +23,8 @@ case = "1.0"
 
 [badges]
 maintenance = { status = "experimental" }
+
+[workspace]
+members = [
+  "test/test-codegen",
+]

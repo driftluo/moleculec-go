@@ -111,7 +111,7 @@ func (s *{union_name}) ItemName() string {{
     switch s.itemID {{
     {union_switch_impl}
     default:
-        panic("invalid data: OrUnion")
+        panic("invalid data: {union_name}")
     }}
 }}
             "#,
@@ -125,7 +125,7 @@ func (s *{struct_name}) ToUnion() *{union_name} {{
     switch s.ItemID() {{
     {to_union_switch_iml}
     default:
-        panic("invalid data: Or")
+        panic("invalid data: {struct_name}")
     }}
 }}
         "#,
