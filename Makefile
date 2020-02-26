@@ -7,7 +7,7 @@ ci:
 	cargo install moleculec --vers ${MOLC_VERSION}
 	cargo install --path .
 	moleculec --language go --schema-file ./test/schema/types.mol | gofmt > ./test/molecule-test/types.go
-	go test ./test/molecule-test/ -v
+	cd ./test/molecule-test/ && go test -v
 	rm ./test/molecule-test/types.go && touch test/molecule-test/types.go
 
 check-moleculec-version:

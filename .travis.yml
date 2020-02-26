@@ -1,15 +1,13 @@
 sudo: true
 
-language: rust
+language: go
 
-rust:
-  - stable
+go:
+  - master
 
 before_install:
-  - wget https://dl.google.com/go/go1.13.7.linux-amd64.tar.gz
-  - sudo tar -C /usr/local -xzf go1.13.7.linux-amd64.tar.gz
-  - export PATH=$PATH:/usr/local/go/bin
-  - go version
+  - curl -sSf https://build.travis-ci.com/files/rustup-init.sh | sh -s -- --default-toolchain=stable --profile=minimal -y
+  - source $HOME/.cargo/env
   - rustup component add rustfmt
   - rustup component add clippy
 
