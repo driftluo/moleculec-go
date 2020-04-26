@@ -160,13 +160,39 @@ dependencies = [
 ]
 
 [[package]]
+name = "molecule"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "663f76cc52219e5957e2f5563cce9d89f98aa8503c9c898b5c412d97df663998"
+dependencies = [
+ "cfg-if",
+]
+
+[[package]]
 name = "molecule-codegen"
 version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c010773d474cda8c804f731d4968817a3730ce42074aff8f99bc31633c320a62"
 dependencies = [
  "case",
- "molecule",
+ "molecule 0.5.0",
+ "pest",
+ "pest_derive",
+ "proc-macro2",
+ "property",
+ "quote",
+ "same-file",
+ "semver",
+]
+
+[[package]]
+name = "molecule-codegen"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fb688831cecb451c0cdb1aba6b429cac07eec8812becf3d1ca80d071f0f29707"
+dependencies = [
+ "case",
+ "molecule 0.6.0",
  "pest",
  "pest_derive",
  "proc-macro2",
@@ -185,7 +211,7 @@ version = "0.1.0"
 dependencies = [
  "case",
  "clap",
- "molecule-codegen",
+ "molecule-codegen 0.6.0",
 ]
 
 [[package]]
@@ -373,7 +399,7 @@ name = "test-codegen"
 version = "0.1.0"
 dependencies = [
  "case",
- "molecule-codegen",
+ "molecule-codegen 0.5.0",
  "serde",
  "serde_yaml",
 ]
