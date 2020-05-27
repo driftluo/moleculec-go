@@ -207,7 +207,7 @@ dependencies = [
 
 [[package]]
 name = "moleculec-go"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "case",
  "clap",

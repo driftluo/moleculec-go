@@ -46,8 +46,14 @@ func {union_name}From{item_name}(v {item_name}) {union_name} {{
     return {union_name}{{itemID: {item_id}, inner: v.AsSlice()}}
 }}
 
-func (s *{union_name}) RawType() *{item_name} {{
-    return {item_name}FromSliceUnchecked(s.AsSlice())
+func (s *{union_name}) Into{item_name}() *{item_name} {{
+    switch s.ItemID() {{
+        case {item_id}:
+            return {item_name}FromSliceUnchecked(s.AsSlice())
+        default:
+            errMsg := strings.Join([]string{{"invalid item_id: expect {item_id}, found", strconv.Itoa(int(s.ItemID()))}}, " ")
+            panic(errMsg)
+    }}
 }}
                         "#,
                         union_name = union_name,
