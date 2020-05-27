@@ -45,6 +45,10 @@ func (s *{union_name}) ItemID() Number {{
 func {union_name}From{item_name}(v {item_name}) {union_name} {{
     return {union_name}{{itemID: {item_id}, inner: v.AsSlice()}}
 }}
+
+func (s *{union_name}) RawType() *{item_name} {{
+    return {item_name}FromSliceUnchecked(s.AsSlice())
+}}
                         "#,
                         union_name = union_name,
                         item_name = item_name.to_camel(),
