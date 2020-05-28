@@ -5,6 +5,13 @@ use molecule_codegen::ast::{self, DefaultContent, HasName};
 use case::CaseExt;
 use std::io;
 
+use core::mem::size_of;
+
+// Little Endian
+pub type Number = u32;
+// Size of Number
+pub const NUMBER_SIZE: usize = size_of::<Number>();
+
 pub(super) trait Generator: HasName + DefaultContent {
     fn generate<W: io::Write>(&self, writer: &mut W) -> io::Result<()>;
     fn common_generate<W: io::Write>(&self, writer: &mut W) -> io::Result<()> {
@@ -483,33 +490,18 @@ func (s *{struct_name}) Len() uint {{
 func (s *{struct_name}) IsEmpty() bool {{
     return s.Len() == 0
 }}
-func (s *{struct_name}) itemOffsets() [][4]byte {{
-    // Preventing index out-of-bounds array accesses when not alignment
-    dataSize := len(s.inner[HeaderSizeUint:]) - len(s.inner[HeaderSizeUint:])%4
-    cap := dataSize / 4
-    ret := make([][4]byte, cap)
-    var firstIdx, secondIdex int
-    for i := 0; i < dataSize; i++ {{
-        firstIdx = i >> 2
-        if firstIdx > cap {{
-            break
-        }}
-        secondIdex = i % 4
-        ret[firstIdx][secondIdex] = s.inner[HeaderSizeUint:][firstIdx*4:][secondIdex]
-    }}
-    return ret
-}}
 // if *{inner_type} is nil, index is out of bounds
 func (s *{struct_name}) Get(index uint) *{inner_type} {{
     var b *{inner_type}
     if index < s.Len() {{
-        offsets := s.itemOffsets()
-        start := unpackNumber(offsets[index][:])
+        start_index := uint(HeaderSizeUint) * (1 + index)
+        start := unpackNumber(s.inner[start_index:]);
 
         if index == s.Len()-1 {{
             b = {inner_type}FromSliceUnchecked(s.inner[start:])
         }} else {{
-            end := unpackNumber(offsets[index+1][:])
+            end_index := start_index + uint(HeaderSizeUint)
+            end := unpackNumber(s.inner[end_index:])
             b = {inner_type}FromSliceUnchecked(s.inner[start:end])
         }}
     }}
@@ -673,23 +665,6 @@ func (s *{struct_name}) Len() uint {{
 func (s *{struct_name}) IsEmpty() bool {{
     return s.Len() == 0
 }}
-func (s *{struct_name}) FieldOffsets() [][4]byte {{
-    // Preventing index out-of-bounds array accesses when not alignment
-    dataSize := len(s.inner[HeaderSizeUint:]) - len(s.inner[HeaderSizeUint:])%4
-    cap := dataSize / 4
-    ret := make([][4]byte, cap)
-    var firstIdx, secondIdex int
-    for i := 0; i < dataSize; i++ {{
-        firstIdx = i >> 2
-        if firstIdx > cap {{
-            break
-        }}
-        secondIdex = i % 4
-        ret[firstIdx][secondIdex] = s.inner[HeaderSizeUint:][firstIdx*4:][secondIdex]
-    }}
-    return ret
-}}
-
 func (s *{struct_name}) CountExtraFields() uint {{
     return s.FieldCount() - {field_count}
 }}
@@ -716,17 +691,16 @@ func (s *{struct_name}) hasExtraFields() bool {{
                 let func = f.name().to_camel();
 
                 let inner = f.typ().name().to_camel();
-                let start = i;
-                let end = i + 1;
+                let start = (i + 1) * NUMBER_SIZE;
+                let end = (i + 2) * NUMBER_SIZE;
                 if i == self.fields().len() - 1 {
                     format!(
                         r#"
 func (s *{struct_name}) {func}() *{inner} {{
     var ret *{inner}
-    offsets := s.FieldOffsets()
-    start := unpackNumber(offsets[0][:])
+    start := unpackNumber(s.inner[{start}:])
     if s.hasExtraFields() {{
-        end := unpackNumber(offsets[1][:])
+        end := unpackNumber(s.inner[{end}:])
         ret = {inner}FromSliceUnchecked({getter_stmt})
     }} else {{
         ret = {inner}FromSliceUnchecked({getter_stmt_last})
@@ -735,6 +709,8 @@ func (s *{struct_name}) {func}() *{inner} {{
 }}
                         "#,
                         struct_name = struct_name,
+                        start = start,
+                        end = end,
                         func = func,
                         inner = inner,
                         getter_stmt = getter_stmt,
@@ -744,9 +720,8 @@ func (s *{struct_name}) {func}() *{inner} {{
                     format!(
                         r#"
 func (s *{struct_name}) {func}() *{inner} {{
-    offsets := s.FieldOffsets()
-    start := unpackNumber(offsets[{start}][:])
-    end := unpackNumber(offsets[{end}][:])
+    start := unpackNumber(s.inner[{start}:])
+    end := unpackNumber(s.inner[{end}:])
     return {inner}FromSliceUnchecked({getter_stmt})
 }}
                "#,
