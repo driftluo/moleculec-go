@@ -221,13 +221,12 @@ impl GenBuilder for ast::DynVec {
             r#"
 func (s *{struct_name}Builder) Build() {struct_name} {{
     itemCount := len(s.inner)
-    size := packNumber(Number(itemCount))
 
     b := new(bytes.Buffer)
 
     // Empty dyn vector, just return size's bytes
     if itemCount == 0 {{
-        b.Write(size)
+        b.Write(packNumber(Number(HeaderSizeUint)))
         return {struct_name}{{inner: b.Bytes()}}
     }}
 

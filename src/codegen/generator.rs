@@ -620,10 +620,10 @@ func {struct_name}FromSlice(slice []byte, compatible bool) (*{struct_name}, erro
         return nil, errors.New(errMsg)
     }}
 
-    offsets := make([]uint32, {field_count})
+    offsets := make([]uint32, fieldCount)
 
-    for i := 0; i < {field_count}; i++ {{
-        offsets[i] = uint32(unpackNumber(slice[HeaderSizeUint:][4*i:]))
+    for i := 0; i < int(fieldCount); i++ {{
+        offsets[i] = uint32(unpackNumber(slice[HeaderSizeUint:][int(HeaderSizeUint)*i:]))
     }}
     offsets = append(offsets, uint32(totalSize))
 
@@ -669,7 +669,7 @@ func (s *{struct_name}) CountExtraFields() uint {{
     return s.FieldCount() - {field_count}
 }}
 
-func (s *{struct_name}) hasExtraFields() bool {{
+func (s *{struct_name}) HasExtraFields() bool {{
     return {field_count} != s.FieldCount()
 }}
             "#,
@@ -699,7 +699,7 @@ func (s *{struct_name}) hasExtraFields() bool {{
 func (s *{struct_name}) {func}() *{inner} {{
     var ret *{inner}
     start := unpackNumber(s.inner[{start}:])
-    if s.hasExtraFields() {{
+    if s.HasExtraFields() {{
         end := unpackNumber(s.inner[{end}:])
         ret = {inner}FromSliceUnchecked({getter_stmt})
     }} else {{

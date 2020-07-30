@@ -116,6 +116,10 @@ func Test{name}Default(t *testing.T) {{
 	if bytes.Compare(y.AsSlice(), expected) != 0 {{
 	    t.Error("type {name} default error: ", y.AsSlice(), expected)
 	}}
+	z := New{name}Builder().Build()
+	if bytes.Compare(y.AsSlice(), z.AsSlice()) != 0 {{
+	    t.Error("type {name} default error: ", y.AsSlice(), z.AsSlice())
+	}}
 }}
             "#,
             name = inner.name,

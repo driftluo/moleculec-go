@@ -2,8 +2,9 @@ package types
 
 import (
 	"bytes"
-	fuzz "github.com/google/gofuzz"
 	"testing"
+
+	fuzz "github.com/google/gofuzz"
 )
 
 func decode_fuzz_test(data []byte) {
