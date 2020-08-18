@@ -90,15 +90,21 @@ func {struct_name}FromSlice(slice []byte, compatible bool) (*{struct_name}, erro
 
         let impl_ = format!(
             r#"
-func (s *{struct_name}) isSome() bool {{
+func (s *{struct_name}) Into{inner_type}() (*{inner_type}, error) {{
+	if s.IsNone() {{
+		return nil, errors.New("No data")
+	}}
+	return {inner_type}FromSliceUnchecked(s.AsSlice()), nil
+}}
+func (s *{struct_name}) IsSome() bool {{
     return len(s.inner) != 0
 }}
-func (s *{struct_name}) isNone() bool {{
+func (s *{struct_name}) IsNone() bool {{
     return len(s.inner) == 0
 }}
 func (s *{struct_name}) AsBuilder() {struct_name}Builder {{
     var ret = New{struct_name}Builder()
-    if s.isSome() {{
+    if s.IsSome() {{
         ret.Set(*{inner_type}FromSliceUnchecked(s.AsSlice()))
     }}
     return *ret
