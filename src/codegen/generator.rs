@@ -430,22 +430,21 @@ func {struct_name}FromSlice(slice []byte, compatible bool) (*{struct_name}, erro
     }}
 
     offsetFirst := unpackNumber(slice[HeaderSizeUint:])
-    if offsetFirst%4 != 0 || uint32(offsetFirst) < HeaderSizeUint*2 {{
+    if uint32(offsetFirst)%HeaderSizeUint != 0 || uint32(offsetFirst) < HeaderSizeUint*2 {{
         errMsg := strings.Join([]string{{"OffsetsNotMatch", "{struct_name}", strconv.Itoa(int(offsetFirst%4)), "!= 0", strconv.Itoa(int(offsetFirst)), "<", strconv.Itoa(int(HeaderSizeUint*2))}}, " ")
         return nil, errors.New(errMsg)
     }}
 
-    itemCount := offsetFirst/4 - 1
-    headerSize := HeaderSizeUint * (uint32(itemCount) + 1)
-    if uint32(sliceLen) < headerSize {{
-        errMsg := strings.Join([]string{{"HeaderIsBroken", "{struct_name}", strconv.Itoa(int(sliceLen)), "<", strconv.Itoa(int(headerSize))}}, " ")
+    if sliceLen < int(offsetFirst) {{
+        errMsg := strings.Join([]string{{"HeaderIsBroken", "{struct_name}", strconv.Itoa(int(sliceLen)), "<", strconv.Itoa(int(offsetFirst))}}, " ")
         return nil, errors.New(errMsg)
     }}
+    itemCount := uint32(offsetFirst)/HeaderSizeUint - 1
 
     offsets := make([]uint32, itemCount)
 
     for i := 0; i < int(itemCount); i++ {{
-        offsets[i] = uint32(unpackNumber(slice[HeaderSizeUint:][4*i:]))
+        offsets[i] = uint32(unpackNumber(slice[HeaderSizeUint:][int(HeaderSizeUint)*i:]))
     }}
 
     offsets = append(offsets, uint32(totalSize))
@@ -608,22 +607,21 @@ func {struct_name}FromSlice(slice []byte, compatible bool) (*{struct_name}, erro
     }}
 
     offsetFirst := unpackNumber(slice[HeaderSizeUint:])
-    if offsetFirst%4 != 0 || uint32(offsetFirst) < HeaderSizeUint*2 {{
+    if uint32(offsetFirst)%HeaderSizeUint != 0 || uint32(offsetFirst) < HeaderSizeUint*2 {{
         errMsg := strings.Join([]string{{"OffsetsNotMatch", "{struct_name}", strconv.Itoa(int(offsetFirst%4)), "!= 0", strconv.Itoa(int(offsetFirst)), "<", strconv.Itoa(int(HeaderSizeUint*2))}}, " ")
         return nil, errors.New(errMsg)
     }}
 
-    fieldCount := offsetFirst/4 - 1
+    if sliceLen < int(offsetFirst) {{
+        errMsg := strings.Join([]string{{"HeaderIsBroken", "{struct_name}", strconv.Itoa(int(sliceLen)), "<", strconv.Itoa(int(offsetFirst))}}, " ")
+        return nil, errors.New(errMsg)
+    }}
+
+    fieldCount := uint32(offsetFirst)/HeaderSizeUint - 1
     if fieldCount < {field_count} {{
         return nil, errors.New("FieldCountNotMatch")
     }} else if !compatible && fieldCount > {field_count} {{
         return nil, errors.New("FieldCountNotMatch")
-    }}
-
-    headerSize := HeaderSizeUint * (uint32(fieldCount) + 1)
-    if uint32(sliceLen) < headerSize {{
-        errMsg := strings.Join([]string{{"HeaderIsBroken", "{struct_name}", strconv.Itoa(int(sliceLen)), "<", strconv.Itoa(int(headerSize))}}, " ")
-        return nil, errors.New(errMsg)
     }}
 
     offsets := make([]uint32, fieldCount)

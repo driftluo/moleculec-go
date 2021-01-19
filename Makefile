@@ -1,5 +1,5 @@
 MOLC    := moleculec
-MOLC_VERSION := 0.5.0
+MOLC_VERSION := 0.7.0
 
 ci:
 	cargo fmt --all -- --check
