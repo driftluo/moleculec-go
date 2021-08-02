@@ -178,6 +178,10 @@ func TestBytesSimple11(t *testing.T) {
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type Bytes error: ", y.AsSlice(), expected)
 	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: Bytes:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
+	}
 }
 
 func TestBytesSimple12(t *testing.T) {
@@ -193,6 +197,10 @@ func TestBytesSimple12(t *testing.T) {
 	y, _ := BytesFromSlice(expected, false)
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type Bytes error: ", y.AsSlice(), expected)
+	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: Bytes:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
 	}
 }
 
@@ -211,6 +219,10 @@ func TestBytesSimple13(t *testing.T) {
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type Bytes error: ", y.AsSlice(), expected)
 	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: Bytes:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
+	}
 }
 
 func TestWordsSimple14(t *testing.T) {
@@ -225,6 +237,10 @@ func TestWordsSimple14(t *testing.T) {
 	y, _ := WordsFromSlice(expected, false)
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type Words error: ", y.AsSlice(), expected)
+	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: Words:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
 	}
 }
 
@@ -241,6 +257,10 @@ func TestWordsSimple15(t *testing.T) {
 	y, _ := WordsFromSlice(expected, false)
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type Words error: ", y.AsSlice(), expected)
+	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: Words:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
 	}
 }
 
@@ -259,6 +279,10 @@ func TestWordsSimple16(t *testing.T) {
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type Words error: ", y.AsSlice(), expected)
 	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: Words:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
+	}
 }
 
 func TestByte3VecSimple17(t *testing.T) {
@@ -273,6 +297,10 @@ func TestByte3VecSimple17(t *testing.T) {
 	y, _ := Byte3VecFromSlice(expected, false)
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type Byte3Vec error: ", y.AsSlice(), expected)
+	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: Byte3Vec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
 	}
 }
 
@@ -289,6 +317,10 @@ func TestByte3VecSimple18(t *testing.T) {
 	y, _ := Byte3VecFromSlice(expected, false)
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type Byte3Vec error: ", y.AsSlice(), expected)
+	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: Byte3Vec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
 	}
 }
 
@@ -307,6 +339,10 @@ func TestByte3VecSimple19(t *testing.T) {
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type Byte3Vec error: ", y.AsSlice(), expected)
 	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: Byte3Vec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
+	}
 }
 
 func TestByte7VecSimple20(t *testing.T) {
@@ -321,6 +357,10 @@ func TestByte7VecSimple20(t *testing.T) {
 	y, _ := Byte7VecFromSlice(expected, false)
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type Byte7Vec error: ", y.AsSlice(), expected)
+	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: Byte7Vec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
 	}
 }
 
@@ -337,6 +377,10 @@ func TestByte7VecSimple21(t *testing.T) {
 	y, _ := Byte7VecFromSlice(expected, false)
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type Byte7Vec error: ", y.AsSlice(), expected)
+	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: Byte7Vec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
 	}
 }
 
@@ -355,6 +399,10 @@ func TestByte7VecSimple22(t *testing.T) {
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type Byte7Vec error: ", y.AsSlice(), expected)
 	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: Byte7Vec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
+	}
 }
 
 func TestStructIVecSimple23(t *testing.T) {
@@ -369,6 +417,10 @@ func TestStructIVecSimple23(t *testing.T) {
 	y, _ := StructIVecFromSlice(expected, false)
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type StructIVec error: ", y.AsSlice(), expected)
+	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: StructIVec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
 	}
 }
 
@@ -385,6 +437,10 @@ func TestStructIVecSimple24(t *testing.T) {
 	y, _ := StructIVecFromSlice(expected, false)
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type StructIVec error: ", y.AsSlice(), expected)
+	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: StructIVec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
 	}
 }
 
@@ -403,6 +459,10 @@ func TestStructIVecSimple25(t *testing.T) {
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type StructIVec error: ", y.AsSlice(), expected)
 	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: StructIVec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
+	}
 }
 
 func TestStructJVecSimple26(t *testing.T) {
@@ -417,6 +477,10 @@ func TestStructJVecSimple26(t *testing.T) {
 	y, _ := StructJVecFromSlice(expected, false)
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type StructJVec error: ", y.AsSlice(), expected)
+	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: StructJVec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
 	}
 }
 
@@ -433,6 +497,10 @@ func TestStructJVecSimple27(t *testing.T) {
 	y, _ := StructJVecFromSlice(expected, false)
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type StructJVec error: ", y.AsSlice(), expected)
+	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: StructJVec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
 	}
 }
 
@@ -451,6 +519,10 @@ func TestStructJVecSimple28(t *testing.T) {
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type StructJVec error: ", y.AsSlice(), expected)
 	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: StructJVec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
+	}
 }
 
 func TestStructPVecSimple29(t *testing.T) {
@@ -465,6 +537,10 @@ func TestStructPVecSimple29(t *testing.T) {
 	y, _ := StructPVecFromSlice(expected, false)
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type StructPVec error: ", y.AsSlice(), expected)
+	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: StructPVec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
 	}
 }
 
@@ -481,6 +557,10 @@ func TestStructPVecSimple30(t *testing.T) {
 	y, _ := StructPVecFromSlice(expected, false)
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type StructPVec error: ", y.AsSlice(), expected)
+	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: StructPVec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
 	}
 }
 
@@ -499,6 +579,10 @@ func TestStructPVecSimple31(t *testing.T) {
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type StructPVec error: ", y.AsSlice(), expected)
 	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: StructPVec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
+	}
 }
 
 func TestBytesVecSimple32(t *testing.T) {
@@ -513,6 +597,10 @@ func TestBytesVecSimple32(t *testing.T) {
 	y, _ := BytesVecFromSlice(expected, false)
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type BytesVec error: ", y.AsSlice(), expected)
+	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: BytesVec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
 	}
 }
 
@@ -529,6 +617,10 @@ func TestBytesVecSimple33(t *testing.T) {
 	y, _ := BytesVecFromSlice(expected, false)
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type BytesVec error: ", y.AsSlice(), expected)
+	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: BytesVec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
 	}
 }
 
@@ -547,6 +639,10 @@ func TestBytesVecSimple34(t *testing.T) {
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type BytesVec error: ", y.AsSlice(), expected)
 	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: BytesVec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
+	}
 }
 
 func TestWordsVecSimple35(t *testing.T) {
@@ -561,6 +657,10 @@ func TestWordsVecSimple35(t *testing.T) {
 	y, _ := WordsVecFromSlice(expected, false)
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type WordsVec error: ", y.AsSlice(), expected)
+	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: WordsVec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
 	}
 }
 
@@ -577,6 +677,10 @@ func TestWordsVecSimple36(t *testing.T) {
 	y, _ := WordsVecFromSlice(expected, false)
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type WordsVec error: ", y.AsSlice(), expected)
+	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: WordsVec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
 	}
 }
 
@@ -595,6 +699,10 @@ func TestWordsVecSimple37(t *testing.T) {
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type WordsVec error: ", y.AsSlice(), expected)
 	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: WordsVec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
+	}
 }
 
 func TestByteOptVecSimple38(t *testing.T) {
@@ -609,6 +717,10 @@ func TestByteOptVecSimple38(t *testing.T) {
 	y, _ := ByteOptVecFromSlice(expected, false)
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type ByteOptVec error: ", y.AsSlice(), expected)
+	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: ByteOptVec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
 	}
 }
 
@@ -626,6 +738,10 @@ func TestByteOptVecSimple39(t *testing.T) {
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type ByteOptVec error: ", y.AsSlice(), expected)
 	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: ByteOptVec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
+	}
 }
 
 func TestByteOptVecSimple40(t *testing.T) {
@@ -642,6 +758,10 @@ func TestByteOptVecSimple40(t *testing.T) {
 	y, _ := ByteOptVecFromSlice(expected, false)
 	if bytes.Compare(y.AsSlice(), expected) != 0 {
 		t.Error("type ByteOptVec error: ", y.AsSlice(), expected)
+	}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {
+		t.Error("struct: ByteOptVec:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
 	}
 }
 

@@ -326,13 +326,18 @@ func {test_name}(t *testing.T) {{
 	{builder}
 	{expected}
 	{assert}
+
+	if x.TotalSize() != uint(len(x.AsSlice())) {{
+        t.Error("struct: {name}:\n data: ", x.AsSlice(), "\n partial read total_size: ", x.TotalSize(), ", actual: ", len(x.AsSlice()))
+	}}
 }}
         "#,
             test_name = test_name,
             builder = builder,
             expected = expected,
             assert = self.assert_impl(name),
-            items_parse = items_parse.join("\n")
+            items_parse = items_parse.join("\n"),
+            name = name,
         )
     }
 }

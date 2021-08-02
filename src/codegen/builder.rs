@@ -145,9 +145,9 @@ impl GenBuilder for ast::Struct {
     fn gen_builder(&self) -> String {
         let struct_name = self.name().to_camel();
 
-        let define = def_builder_for_struct_or_table(&struct_name, &self.fields()[..]);
-        let setter = impl_setters_for_struct_or_table(&struct_name, &self.fields()[..]);
-        let default = impl_default_for_struct_or_table(&struct_name, &self.fields()[..]);
+        let define = def_builder_for_struct_or_table(&struct_name, self.fields());
+        let setter = impl_setters_for_struct_or_table(&struct_name, self.fields());
+        let default = impl_default_for_struct_or_table(&struct_name, self.fields());
 
         let fields_encode = self
             .fields()
@@ -264,9 +264,9 @@ impl GenBuilder for ast::Table {
         let field_count = self.fields().len();
         let struct_name = self.name().to_camel();
 
-        let define = def_builder_for_struct_or_table(&struct_name, &self.fields()[..]);
-        let setter = impl_setters_for_struct_or_table(&struct_name, &self.fields()[..]);
-        let default = impl_default_for_struct_or_table(&struct_name, &self.fields()[..]);
+        let define = def_builder_for_struct_or_table(&struct_name, self.fields());
+        let setter = impl_setters_for_struct_or_table(&struct_name, self.fields());
+        let default = impl_default_for_struct_or_table(&struct_name, self.fields());
 
         let build = if self.fields().is_empty() {
             format!(

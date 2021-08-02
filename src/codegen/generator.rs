@@ -302,7 +302,7 @@ func (s *{struct_name}) {func_name}() *{inner} {{
 
         writeln!(writer, "{}", each_getter.join("\n"))?;
 
-        let as_builder = impl_as_builder_for_struct_or_table(&struct_name, &self.fields()[..]);
+        let as_builder = impl_as_builder_for_struct_or_table(&struct_name, self.fields());
         writeln!(writer, "{}", as_builder)?;
 
         Ok(())
@@ -350,7 +350,7 @@ func {struct_name}FromSlice(slice []byte, _compatible bool) (*{struct_name}, err
         let impl_ = format!(
             r#"
 func (s *{struct_name}) TotalSize() uint {{
-    return uint(HeaderSizeUint) * (s.ItemCount()+1)
+    return uint(HeaderSizeUint) + {item_size} * s.ItemCount()
 }}
 func (s *{struct_name}) ItemCount() uint {{
     number := uint(unpackNumber(s.inner))
@@ -741,7 +741,7 @@ func (s *{struct_name}) {func}() *{inner} {{
             .collect::<Vec<_>>();
         writeln!(writer, "{}", each_getter.join("\n"))?;
 
-        let as_builder = impl_as_builder_for_struct_or_table(&struct_name, &self.fields()[..]);
+        let as_builder = impl_as_builder_for_struct_or_table(&struct_name, self.fields());
         writeln!(writer, "{}", as_builder)?;
         Ok(())
     }
