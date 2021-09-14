@@ -1,13 +1,13 @@
 MOLC    := moleculec
-MOLC_VERSION := 0.7.0
+MOLC_VERSION := 0.7.2
 
 ci:
 	cargo fmt --all -- --check
-	RUSTFLAGS='-F warnings' cargo clippy --all
+	RUSTFLAGS='-D warnings' cargo clippy --all
 	cargo install moleculec --vers ${MOLC_VERSION}
 	cargo install --path .
 	moleculec --language go --schema-file ./test/schema/types.mol | gofmt > ./test/molecule-test/types.go
-	cd ./test/molecule-test/ && go test -v
+	cd ./test/molecule-test/ && go test -count=1 -v
 	rm ./test/molecule-test/types.go && touch test/molecule-test/types.go
 
 check-moleculec-version:

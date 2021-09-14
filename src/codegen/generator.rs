@@ -500,7 +500,7 @@ func (s *{struct_name}) Get(index uint) *{inner_type} {{
     var b *{inner_type}
     if index < s.Len() {{
         start_index := uint(HeaderSizeUint) * (1 + index)
-        start := unpackNumber(s.inner[start_index:]);
+        start := unpackNumber(s.inner[start_index:])
 
         if index == s.Len()-1 {{
             b = {inner_type}FromSliceUnchecked(s.inner[start:])
