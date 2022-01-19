@@ -453,6 +453,14 @@ func (s *{struct_name}Builder) Extend(iter []{inner_name}) *{struct_name}Builder
     }}
     return s
 }}
+func (s *{struct_name}Builder) Replace(index uint, v {inner_name}) *{inner_name} {{
+    if uint(len(s.inner)) > index {{
+        a := s.inner[index]
+        s.inner[index] = v
+        return &a
+    }}
+    return nil
+}}
     "#,
         struct_name = struct_name,
         inner_name = inner_name
