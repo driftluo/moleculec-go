@@ -1,6 +1,6 @@
 [package]
 name = "moleculec-go"
-version = "0.1.9"
+version = "0.1.10"
 authors = ["driftluo <driftluo@foxmail.com>"]
 edition = "2018"
 description = "Compiler plugin for moleculec."
