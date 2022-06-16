@@ -1,6 +1,6 @@
 [package]
 name = "moleculec-go"
-version = "0.1.9"
+version = "0.1.10"
 authors = ["driftluo <driftluo@foxmail.com>"]
 edition = "2018"
 description = "Compiler plugin for moleculec."
@@ -18,7 +18,7 @@ license = "MIT"
 
 [dependencies]
 molecule-codegen = { version = "0.7.0", features = ["compiler-plugin"] }
-clap = { version = "2.33", features = ["yaml"] }
+clap = { version = "3", features = ["yaml", "cargo"] }
 case = "1.0"
 
 [badges]

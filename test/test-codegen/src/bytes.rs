@@ -24,7 +24,7 @@ impl<'b> serde::de::Visitor<'b> for BytesVisitor {
             return Ok(Default::default());
         }
 
-        let v_new = v[2..].replace("_", "").replace("/", "");
+        let v_new = v[2..].replace('_', "").replace('/', "");
         if v_new.len() & 1 != 0 {
             return Err(E::invalid_value(serde::de::Unexpected::Str(v), &self));
         }

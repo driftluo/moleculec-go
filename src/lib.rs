@@ -19,7 +19,7 @@ pub struct AppConfig {
     format: IntermediateFormat,
 }
 
-type RawAppConfig<'a> = (IntermediateFormat, &'a clap::ArgMatches<'a>);
+type RawAppConfig<'a> = (IntermediateFormat, &'a clap::ArgMatches);
 
 pub fn build_commandline(format: IntermediateFormat) -> AppConfig {
     let yaml = clap::load_yaml!("cli/go-plugin.yaml");
