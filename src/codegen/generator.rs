@@ -597,10 +597,6 @@ func {struct_name}FromSlice(slice []byte, compatible bool) (*{struct_name}, erro
         return nil, errors.New(errMsg)
     }}
 
-    if uint32(sliceLen) == HeaderSizeUint && {field_count} == 0 {{
-        return &{struct_name}{{inner: slice}}, nil
-    }}
-
     if uint32(sliceLen) < HeaderSizeUint*2 {{
         errMsg := strings.Join([]string{{"TotalSizeNotMatch", "{struct_name}", strconv.Itoa(int(sliceLen)), "<", strconv.Itoa(int(HeaderSizeUint*2))}}, " ")
         return nil, errors.New(errMsg)
