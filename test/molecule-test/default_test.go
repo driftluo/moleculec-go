@@ -1157,3 +1157,19 @@ func TestUnionADefault(t *testing.T) {
 		t.Error("type UnionA default error: ", y.AsSlice(), z.AsSlice())
 	}
 }
+
+func TestUnionBDefault(t *testing.T) {
+	x := UnionBDefault()
+	expected, _ := hex.DecodeString("0000000000")
+	if bytes.Compare(x.AsSlice(), expected) != 0 {
+		t.Error("type UnionB default error: ", x.AsSlice(), expected)
+	}
+	y, _ := UnionBFromSlice(expected, false)
+	if bytes.Compare(y.AsSlice(), expected) != 0 {
+		t.Error("type UnionB default error: ", y.AsSlice(), expected)
+	}
+	z := NewUnionBBuilder().Build()
+	if bytes.Compare(y.AsSlice(), z.AsSlice()) != 0 {
+		t.Error("type UnionB default error: ", y.AsSlice(), z.AsSlice())
+	}
+}

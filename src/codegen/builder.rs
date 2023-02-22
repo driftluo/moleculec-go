@@ -46,14 +46,34 @@ func (s *{struct_name}Builder) Build() {struct_name} {{
 impl GenBuilder for ast::Union {
     fn gen_builder(&self) -> String {
         let struct_name = self.name().to_camel();
+        let new_builder_string = if self.items().is_empty() || {
+            // Check if is a 0 id started union
+            self.items()
+                .iter()
+                .map(|union_item| union_item.id())
+                .any(|x| x == 0)
+        } {
+            format!(
+                r#"
+            v := {struct_name}Default()
+            return &{struct_name}Builder{{inner: *v.ToUnion()}}
+            "#
+            )
+        } else {
+            format!(
+                r#"
+            v := {struct_name}Default()
+            return &{struct_name}Builder{{inner: {struct_name}Union{{inner: v.inner[HeaderSizeUint:]}} }}
+            "#
+            )
+        };
         let define = format!(
             r#"
 type {struct_name}Builder struct {{
 	inner  {struct_name}Union
 }}
 func New{struct_name}Builder() *{struct_name}Builder {{
-    v := {struct_name}Default()
-	return &{struct_name}Builder{{inner: *v.ToUnion()}}
+    {new_builder_string}
 }}
 func (s *{struct_name}Builder) Set(v {struct_name}Union) *{struct_name}Builder {{
 	s.inner = v

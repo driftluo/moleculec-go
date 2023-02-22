@@ -1115,3 +1115,33 @@ func TestUnionASimple63(t *testing.T) {
 		t.Error("type UnionA error: ", y.AsSlice(), expected)
 	}
 }
+
+func TestUnionBSimple64(t *testing.T) {
+	item, _ := hex.DecodeString("02")
+	x := NewUnionBBuilder().Set(UnionBUnionFromByte(*ByteFromSliceUnchecked(item))).Build()
+
+	expected, _ := hex.DecodeString("0200000002")
+
+	if bytes.Compare(x.AsSlice(), expected) != 0 {
+		t.Error("type UnionB error: ", x.AsSlice(), expected)
+	}
+	y, _ := UnionBFromSlice(expected, false)
+	if bytes.Compare(y.AsSlice(), expected) != 0 {
+		t.Error("type UnionB error: ", y.AsSlice(), expected)
+	}
+}
+
+func TestUnionBSimple65(t *testing.T) {
+	item, _ := hex.DecodeString("0001")
+	x := NewUnionBBuilder().Set(UnionBUnionFromWord(*WordFromSliceUnchecked(item))).Build()
+
+	expected, _ := hex.DecodeString("040000000001")
+
+	if bytes.Compare(x.AsSlice(), expected) != 0 {
+		t.Error("type UnionB error: ", x.AsSlice(), expected)
+	}
+	y, _ := UnionBFromSlice(expected, false)
+	if bytes.Compare(y.AsSlice(), expected) != 0 {
+		t.Error("type UnionB error: ", y.AsSlice(), expected)
+	}
+}
