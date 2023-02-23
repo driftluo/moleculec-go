@@ -1160,7 +1160,7 @@ func TestUnionADefault(t *testing.T) {
 
 func TestUnionBDefault(t *testing.T) {
 	x := UnionBDefault()
-	expected, _ := hex.DecodeString("0000000000")
+	expected, _ := hex.DecodeString("0200000000")
 	if bytes.Compare(x.AsSlice(), expected) != 0 {
 		t.Error("type UnionB default error: ", x.AsSlice(), expected)
 	}

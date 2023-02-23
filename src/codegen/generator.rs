@@ -141,7 +141,7 @@ func {struct_name}FromSlice(slice []byte, compatible bool) (*{struct_name}, erro
     switch itemID {{
     {from_slice_switch_iml}
     default:
-        return &{struct_name}{{inner: slice}}, errors.New("UnknownItem, {struct_name}")
+        return nil, errors.New("UnknownItem, {struct_name}")
     }}
     return &{struct_name}{{inner: slice}}, nil
 }}
