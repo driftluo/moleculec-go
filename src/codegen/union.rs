@@ -29,13 +29,13 @@ func (s *{union_name}) ItemID() Number {{
 
         let inner_len = self.items().len();
         let (union_items, union_ids, part_impl) = {
-            self.items().iter().enumerate().fold(
+            self.items().iter().fold(
                 (
                     Vec::with_capacity(inner_len),
                     Vec::with_capacity(inner_len),
                     Vec::with_capacity(inner_len),
                 ),
-                |(mut union_items, mut union_ids, mut part_impl), (_, inner)| {
+                |(mut union_items, mut union_ids, mut part_impl), inner| {
                     let item_name = inner.typ().name();
                     let item_id = inner.id();
                     union_items.push(item_name);
