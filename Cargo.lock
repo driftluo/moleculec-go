@@ -171,18 +171,18 @@ checksum = "3e2e65a1a2e43cfcb47a895c4c8b10d1f4a61097f9f254f183aee60cad9c651d"
 
 [[package]]
 name = "molecule"
-version = "0.7.3"
+version = "0.7.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "edc8276c02a006bddad7d1c28c1a88f30421e1b5f0ba0ca96ceb8077c7d20c01"
+checksum = "d4fd9767ab5e5f2ea40f71ff4c8bdb633c50509052e093c2fdd0e390a749dfa3"
 dependencies = [
  "cfg-if",
 ]
 
 [[package]]
 name = "molecule-codegen"
-version = "0.7.3"
+version = "0.7.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f57a142d0c94604531998022664c7aebe9d5a8b3ef3806c40fa971acc911678b"
+checksum = "1f4e977c547ac5f302a213a2a44daf4748532bf4f2b4fc332c60052b3b72e788"
 dependencies = [
  "case",
  "molecule",

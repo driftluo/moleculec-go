@@ -53,7 +53,7 @@ type {struct_name}Builder struct {{
 }}
 func New{struct_name}Builder() *{struct_name}Builder {{
     v := {struct_name}Default()
-	return &{struct_name}Builder{{inner: *v.ToUnion()}}
+    return &{struct_name}Builder{{inner: *v.ToUnion()}}
 }}
 func (s *{struct_name}Builder) Set(v {struct_name}Union) *{struct_name}Builder {{
 	s.inner = v
