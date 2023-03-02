@@ -19,22 +19,27 @@ pub struct AppConfig {
     format: IntermediateFormat,
 }
 
-type RawAppConfig<'a> = (IntermediateFormat, &'a clap::ArgMatches);
+type RawAppConfig = (IntermediateFormat, clap::ArgMatches);
 
 pub fn build_commandline(format: IntermediateFormat) -> AppConfig {
-    let yaml = clap::load_yaml!("cli/go-plugin.yaml");
-    let matches = clap::App::from_yaml(yaml)
-        .name("Moleculec Go Plugin")
+    let matches = clap::Command::new("moleculec-go")
+        .name("Moleculec Plugin")
         .about("Compiler plugin for molecule to generate code.")
         .version(clap::crate_version!())
+        .arg(
+            clap::Arg::new("format")
+                .long("format")
+                .help("Output the supported format for the intermediate data.")
+                .action(clap::ArgAction::SetTrue),
+        )
         .get_matches();
-    AppConfig::from(&(format, &matches))
+    AppConfig::from((format, matches))
 }
 
-impl<'a> From<&'a RawAppConfig<'a>> for AppConfig {
-    fn from(input: &'a RawAppConfig<'a>) -> Self {
+impl From<RawAppConfig> for AppConfig {
+    fn from(input: RawAppConfig) -> Self {
         let (format, matches) = input;
-        let action = if matches.is_present("format") {
+        let action = if matches.get_flag("format") {
             AppAction::DisplayFormat
         } else {
             let mut input = Vec::new();
@@ -44,10 +49,7 @@ impl<'a> From<&'a RawAppConfig<'a>> for AppConfig {
             };
             AppAction::ProcessIntermediate(input)
         };
-        Self {
-            action,
-            format: *format,
-        }
+        Self { action, format }
     }
 }
 
