@@ -70,6 +70,10 @@ func packNumber(num Number) []byte {
     binary.LittleEndian.PutUint32(b, uint32(num))
     return b
 }
+
+func UnpackByte(b Byte) byte {
+    return b.inner
+}
                     "#,
             );
 
