@@ -6,6 +6,7 @@ use case::CaseExt;
 use std::io;
 
 use core::mem::size_of;
+use std::io::Write;
 
 // Little Endian
 pub type Number = u32;
@@ -59,6 +60,18 @@ func {struct_name}Default() {struct_name} {{
         writeln!(writer, "{}", default)?;
         Ok(())
     }
+
+    // mark this as false to keep the original behavior
+    fn need_unpack() -> bool { false }
+}
+
+/// For generate native conversion codes
+pub trait NativeGenerator : HasName {
+
+    /// Whether this type needs to unpack
+    fn need_unpack() -> bool;
+
+    fn native_type_support_generate(&self, writer: &mut impl io::Write) -> io::Result<()>;
 }
 
 impl Generator for ast::Option_ {
@@ -118,6 +131,23 @@ func (s *{struct_name}) AsBuilder() {struct_name}Builder {{
     }
 }
 
+impl NativeGenerator for ast::Option_ {
+    fn need_unpack() -> bool {
+        true
+    }
+
+    fn native_type_support_generate(&self, writer: &mut impl io::Write) -> io::Result<()> {
+        Ok(())
+    }
+}
+
+//impl Generator for ast::Primitive {
+//    fn generate<W: io::Write>(&self, writer: &mut W) -> io::Result<()> {
+//        self.native_type_support_generate(writer)?;
+//        Ok(())
+//    }
+//}
+
 impl Generator for ast::Union {
     fn generate<W: io::Write>(&self, writer: &mut W) -> io::Result<()> {
         writeln!(writer, "{}", self.gen_builder())?;
@@ -163,6 +193,25 @@ func (s *{struct_name}) AsBuilder() {struct_name}Builder {{
             struct_name = struct_name
         );
         writeln!(writer, "{}", struct_impl)?;
+        self.native_type_support_generate(writer)?;
+        Ok(())
+    }
+}
+
+impl NativeGenerator for ast::Union {
+    fn need_unpack() -> bool {
+        true
+    }
+
+    fn native_type_support_generate(&self, writer: &mut impl io::Write) -> io::Result<()> {
+        let struct_name = self.name().to_camel();
+        let def = format!(
+            r#"
+            func Unpack{struct_name}(v *{struct_name}) *{struct_name}Union {{
+            return v.ToUnion()
+            }}
+            "#);
+        writeln!(writer, "{}", def)?;
         Ok(())
     }
 }
@@ -304,6 +353,79 @@ func (s *{struct_name}) {func_name}() *{inner} {{
 
         let as_builder = impl_as_builder_for_struct_or_table(&struct_name, self.fields());
         writeln!(writer, "{}", as_builder)?;
+
+        self.native_type_support_generate(writer)?;
+        Ok(())
+    }
+}
+
+impl NativeGenerator for ast::Primitive {
+    fn need_unpack() -> bool {
+        true
+    }
+
+    fn native_type_support_generate(&self, writer: &mut impl Write) -> io::Result<()> {
+        let struct_name = self.name().to_camel();
+        let (unpack_def, native_type_name) = match self.size() {
+            1 => ("return binary.LittleEndian.Uint8(v.inner)", "uint8"),
+            2 => ("return binary.LittleEndian.Uint16(v.inner)", "uint16"),
+            4 => ("return binary.LittleEndian.Uint32(v.inner)", "uint32"),
+            8 => ("return binary.LittleEndian.Uint64(v.inner)", "uint64"),
+            _ => unreachable!("invalid size"),
+        };
+
+        writeln!(writer,"{}", format!(r#"
+        func Unpack{struct_name}(v *{struct_name}) {native_type_name} {{
+             {unpack_def}
+        }}
+        "#))?;
+        Ok(())
+    }
+}
+
+impl NativeGenerator for ast::Struct {
+    fn need_unpack() -> bool {
+        true
+    }
+
+    fn native_type_support_generate(&self, writer: &mut impl Write) -> io::Result<()> {
+        let struct_name = self.name().to_camel();
+        let struct_fields_def = self.fields().iter().map(|f| {
+        let field_name = f.name().to_camel();
+        let field_type = f.typ().name().to_camel();
+        format!("{} *{} `json:\"{}\"`", field_name, field_type, f.name())
+        }).collect::<Vec<String>>().join("\n");
+
+        // Generates the struct definition
+        let struct_def = format!(r#"
+type Native{struct_name} struct {{
+     {struct_fields_def}
+}}
+"#);
+        writeln!(writer, "{}", struct_def)?;
+
+        let fields_unpack_def = self.fields().iter().map(|f| {
+
+            let field_name = f.name().to_camel();
+            let field_type = f.typ().name().to_camel();
+            if f.typ().is_byte() {
+                format!("native_val.{} = v.{}()", field_name, field_name)
+            } else {
+                format!("native_val.{} =  Unpack{}(v.{}())", field_name, field_type, field_name)
+            }
+        }).collect::<Vec<String>>().join("\n");
+
+        // Generates Unpacking function
+        let unpack_def = format!(r#"
+func Unpack{struct_name}(v *{struct_name}) *Native{struct_name} {{
+    native_val := &Native{struct_name}{{
+    }}
+    //s := v.AsBuilder()
+    {fields_unpack_def}
+    return native_val
+}}
+"#);
+        writeln!(writer, "{}", unpack_def)?;
 
         Ok(())
     }
@@ -739,6 +861,53 @@ func (s *{struct_name}) {func}() *{inner} {{
 
         let as_builder = impl_as_builder_for_struct_or_table(&struct_name, self.fields());
         writeln!(writer, "{}", as_builder)?;
+        Ok(())
+    }
+}
+
+impl NativeGenerator for ast::Table {
+    fn need_unpack() -> bool {
+        true
+    }
+
+    fn native_type_support_generate(&self, writer: &mut impl Write) -> io::Result<()> {
+        let struct_name = self.name().to_camel();
+        let struct_fields_def = self.fields().iter().map(|f| {
+            let field_name = f.name().to_camel();
+            let field_type = f.typ().name().to_camel();
+            format!("{} *{} `json:\"{}\"`", field_name, field_type, f.name())
+        }).collect::<Vec<String>>().join("\n");
+
+        // Generates the struct definition
+        let struct_def = format!(r#"
+type Native{struct_name} struct {{
+     {struct_fields_def}
+}}
+"#);
+        writeln!(writer, "{}", struct_def)?;
+
+        let fields_unpack_def = self.fields().iter().map(|f| {
+            let field_name = f.name().to_camel();
+            let field_type = f.typ().name().to_camel();
+            if f.typ().is_byte() {
+                format!("native_val.{} = s.{}()", field_name, field_name)
+            } else {
+                format!("native_val.{} =  Unpack{}(s.{}())", field_name, field_type, field_name)
+            }
+        }).collect::<Vec<String>>().join("\n");
+
+        // Generates Unpacking function
+        let unpack_def = format!(r#"
+func Unpack{struct_name}(v *{struct_name}) *Native{struct_name} {{
+    native_val := &Native{struct_name}{{
+    }}
+    s := v.AsBuilder()
+    {fields_unpack_def}
+    return native_val
+}}
+"#);
+        writeln!(writer, "{}", unpack_def)?;
+
         Ok(())
     }
 }
