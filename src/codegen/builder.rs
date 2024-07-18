@@ -1,6 +1,6 @@
-use molecule_codegen::ast::{self, HasName};
-
+use super::sanitize_identifier;
 use case::CaseExt;
+use molecule_codegen::ast::{self, HasName};
 
 pub(in super::super) trait GenBuilder {
     fn gen_builder(&self) -> String;
@@ -137,7 +137,7 @@ func (s *{struct_name}Builder) Nth{index}(v {inner_type}) *{struct_name}Builder 
             .collect::<Vec<String>>()
             .join("\n");
 
-        vec![define, entire_setter, each_setter].join("\n")
+        [define, entire_setter, each_setter].join("\n")
     }
 }
 
@@ -153,7 +153,7 @@ impl GenBuilder for ast::Struct {
             .fields()
             .iter()
             .map(|f| {
-                let field_name = &f.name();
+                let field_name = &sanitize_identifier(f.name());
                 format!("b.Write(s.{}.AsSlice())", field_name)
             })
             .collect::<Vec<String>>()
@@ -171,7 +171,7 @@ func (s *{struct_name}Builder) Build() {struct_name} {{
             fields_encode = fields_encode
         );
 
-        vec![define, build, setter, default].join("\n")
+        [define, build, setter, default].join("\n")
     }
 }
 
@@ -205,7 +205,7 @@ func (s *{struct_name}Builder) Build() {struct_name} {{
             struct_name = struct_name
         );
 
-        vec![define, build, setter, default].join("\n")
+        [define, build, setter, default].join("\n")
     }
 }
 
@@ -255,7 +255,7 @@ func (s *{struct_name}Builder) Build() {struct_name} {{
           "#,
             struct_name = struct_name
         );
-        vec![define, build, setter, default].join("\n")
+        [define, build, setter, default].join("\n")
     }
 }
 
@@ -284,7 +284,7 @@ func (s *{struct_name}Builder) Build() {struct_name} {{
                 .fields()
                 .iter()
                 .map(|f| {
-                    let field_name = &f.name();
+                    let field_name = &sanitize_identifier(f.name());
                     format!("offsets = append(offsets, totalSize)\ntotalSize += uint32(len(s.{}.AsSlice()))", field_name)
                 })
                 .collect::<Vec<String>>()
@@ -293,7 +293,7 @@ func (s *{struct_name}Builder) Build() {struct_name} {{
                 .fields()
                 .iter()
                 .map(|f| {
-                    let field_name = &f.name();
+                    let field_name = &sanitize_identifier(f.name());
                     format!("b.Write(s.{}.AsSlice())", field_name)
                 })
                 .collect::<Vec<String>>()
@@ -325,7 +325,7 @@ func (s *{struct_name}Builder) Build() {struct_name} {{
                 field_count = field_count
             )
         };
-        vec![define, build, setter, default].join("\n")
+        [define, build, setter, default].join("\n")
     }
 }
 
@@ -333,7 +333,7 @@ fn def_builder_for_struct_or_table(struct_name: &str, inner: &[ast::FieldDecl]) 
     let fields = inner
         .iter()
         .map(|f| {
-            let field_name = &f.name();
+            let field_name = &sanitize_identifier(f.name());
             let field_type = f.typ().name().to_camel();
             format!("{} {}", field_name, field_type)
         })
@@ -355,7 +355,7 @@ fn impl_default_for_struct_or_table(struct_name: &str, inner: &[ast::FieldDecl])
     let each_field = inner
         .iter()
         .map(|f| {
-            let field_name = &f.name();
+            let field_name = &sanitize_identifier(f.name());
             let field_type = f.typ().name().to_camel();
             format!(
                 "{field_name}: {field_type}Default()",
@@ -381,7 +381,7 @@ fn impl_setters_for_struct_or_table(struct_name: &str, inner: &[ast::FieldDecl])
         .iter()
         .map(|f| {
             let func_name = f.name().to_camel();
-            let field_name = &f.name();
+            let field_name = &sanitize_identifier(f.name());
             let field_type = f.typ().name().to_camel();
             format!(
                 r#"

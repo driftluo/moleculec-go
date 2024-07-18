@@ -3,7 +3,8 @@ pub const PLUGIN_VERSION: &str = env!("CARGO_PKG_VERSION");
 
 pub(crate) struct Generator;
 
-use std::io;
+use case::CaseExt;
+use std::{collections::HashSet, io, sync::OnceLock};
 
 mod generator;
 use generator::Generator as _;
@@ -89,5 +90,50 @@ func packNumber(num Number) []byte {
             };
         }
         Ok(())
+    }
+}
+
+static GO_KEYWORDS: OnceLock<HashSet<&'static str>> = OnceLock::new();
+
+fn go_keyword() -> &'static HashSet<&'static str> {
+    GO_KEYWORDS.get_or_init(|| {
+        IntoIterator::into_iter([
+            "break",
+            "case",
+            "chan",
+            "const",
+            "continue",
+            "default",
+            "defer",
+            "else",
+            "fallthrough",
+            "for",
+            "func",
+            "go",
+            "goto",
+            "if",
+            "import",
+            "interface",
+            "map",
+            "package",
+            "range",
+            "return",
+            "select",
+            "struct",
+            "switch",
+            "type",
+            "var",
+        ])
+        .collect()
+    })
+}
+
+pub(crate) fn sanitize_identifier(name: &str) -> String {
+    let keywords = go_keyword();
+    let snake_name = name.to_snake();
+    if keywords.contains(snake_name.as_str()) {
+        snake_name + "_"
+    } else {
+        snake_name
     }
 }
