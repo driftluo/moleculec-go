@@ -145,7 +145,7 @@ func (s *{struct_name}) ToUnion() *{union_name} {{
         );
 
         (
-            vec![define, part_impl.join("\n"), union_switch, to_union].join("\n"),
+            [define, part_impl.join("\n"), union_switch, to_union].join("\n"),
             from_slice_switch_iml,
         )
     }
