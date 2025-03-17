@@ -1,5 +1,5 @@
 MOLC    := moleculec
-MOLC_VERSION := 0.7.5
+MOLC_VERSION := 0.9.0
 MOLC_TEST_DIR = ./test/molecule-test
 
 ci:
