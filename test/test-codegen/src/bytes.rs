@@ -5,7 +5,7 @@ pub(crate) struct Bytes(String);
 
 pub(crate) struct BytesVisitor;
 
-impl<'b> serde::de::Visitor<'b> for BytesVisitor {
+impl serde::de::Visitor<'_> for BytesVisitor {
     type Value = Bytes;
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {

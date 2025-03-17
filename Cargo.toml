@@ -1,6 +1,6 @@
 [package]
 name = "moleculec-go"
-version = "0.1.11"
+version = "0.1.12"
 authors = ["driftluo <driftluo@foxmail.com>"]
 edition = "2018"
 description = "Compiler plugin for moleculec."
@@ -17,7 +17,7 @@ license = "MIT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-molecule-codegen = { version = "0.8", features = ["compiler-plugin"] }
+molecule-codegen = { version = "0.9", features = ["compiler-plugin"] }
 clap = { version = "4", features = ["cargo"] }
 case = "1.0"
 
